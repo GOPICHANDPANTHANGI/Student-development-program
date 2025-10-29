@@ -1,0 +1,13 @@
+{
+  "name": "sdp-web",
+  "version": "1.0.0",
+  "description": "Student Development Program Management System",
+  "main": "index.html",
+  "scripts": {
+    "start": "python -m http.server 8000",
+    "build": "echo 'Static site - no build needed'"
+  },
+  "keywords": ["sdp", "education", "student-programs"],
+  "author": "SDP Team",
+  "license": "MIT"
+}

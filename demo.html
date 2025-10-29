@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SkillQuest - Enhanced Design Demo</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="./styles.css">
+</head>
+<body class="gradient-bg">
+    <div class="max-w-6xl mx-auto px-6 py-10">
+        <!-- Header -->
+        <header class="text-center mb-12">
+            <div class="inline-flex items-center gap-3 mb-4">
+                <div class="w-12 h-12 rounded-xl bg-white/10 grid place-items-center shadow-glow">
+                    <span class="text-orange-300 font-bold text-lg">SQ</span>
+                </div>
+                <h1 class="text-4xl font-bold text-gradient">SkillQuest</h1>
+            </div>
+            <p class="text-xl text-slate-200">Enhanced Design Showcase</p>
+        </header>
+
+        <!-- Navigation -->
+        <nav class="flex justify-center gap-4 mb-12">
+            <a href="index.html" class="nav-link">Home</a>
+            <a href="student.html" class="nav-link">Student Portal</a>
+            <a href="admin.html" class="nav-link">Admin Dashboard</a>
+            <a href="analytics.html" class="nav-link">Analytics</a>
+        </nav>
+
+        <!-- Stats Grid -->
+        <section class="grid md:grid-cols-3 gap-6 mb-12">
+            <div class="stat-card animate-fade-in">
+                <div class="text-3xl mb-2">📚</div>
+                <div class="stat-number">25</div>
+                <div class="stat-label">Active Programs</div>
+            </div>
+            <div class="stat-card animate-fade-in" style="animation-delay: 0.1s">
+                <div class="text-3xl mb-2">👥</div>
+                <div class="stat-number">150</div>
+                <div class="stat-label">Enrolled Students</div>
+            </div>
+            <div class="stat-card animate-fade-in" style="animation-delay: 0.2s">
+                <div class="text-3xl mb-2">⭐</div>
+                <div class="stat-number">4.8</div>
+                <div class="stat-label">Average Rating</div>
+            </div>
+        </section>
+
+        <!-- Feature Cards -->
+        <section class="grid md:grid-cols-2 gap-8 mb-12">
+            <div class="program-card animate-fade-in" style="animation-delay: 0.3s">
+                <h3 class="text-xl font-semibold mb-3">Modern UI Design</h3>
+                <p class="text-slate-200 mb-4">Beautiful gradient backgrounds, glass morphism effects, and smooth animations create an engaging user experience.</p>
+                <div class="flex gap-2">
+                    <span class="px-3 py-1 rounded-full bg-orange-400/20 text-orange-300 text-sm">Gradients</span>
+                    <span class="px-3 py-1 rounded-full bg-blue-400/20 text-blue-300 text-sm">Glass Effects</span>
+                    <span class="px-3 py-1 rounded-full bg-purple-400/20 text-purple-300 text-sm">Animations</span>
+                </div>
+            </div>
+            
+            <div class="program-card animate-fade-in" style="animation-delay: 0.4s">
+                <h3 class="text-xl font-semibold mb-3">Enhanced Interactions</h3>
+                <p class="text-slate-200 mb-4">Hover effects, focus states, and micro-interactions provide immediate feedback and improve usability.</p>
+                <div class="flex gap-2">
+                    <span class="px-3 py-1 rounded-full bg-teal-400/20 text-teal-300 text-sm">Hover Effects</span>
+                    <span class="px-3 py-1 rounded-full bg-green-400/20 text-green-300 text-sm">Focus States</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Button Showcase -->
+        <section class="card mb-12 animate-fade-in" style="animation-delay: 0.5s">
+            <h3 class="text-xl font-semibold mb-6">Button Styles</h3>
+            <div class="flex flex-wrap gap-4">
+                <button class="btn btn-primary">Primary Button</button>
+                <button class="btn btn-secondary">Secondary Button</button>
+                <button class="btn btn-outline">Outline Button</button>
+            </div>
+        </section>
+
+        <!-- Form Example -->
+        <section class="card animate-fade-in" style="animation-delay: 0.6s">
+            <h3 class="text-xl font-semibold mb-6">Form Elements</h3>
+            <div class="grid md:grid-cols-2 gap-4">
+                <input type="text" class="form-input" placeholder="Enter your name">
+                <input type="email" class="form-input" placeholder="Enter your email">
+                <textarea class="form-input md:col-span-2" rows="3" placeholder="Your message"></textarea>
+                <div class="md:col-span-2">
+                    <button class="btn btn-primary">Submit Form</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer class="text-center mt-16 text-slate-300">
+            <p>SkillQuest - Enhanced with modern design principles</p>
+        </footer>
+    </div>
+
+    <script>
+        // Add some interactive effects
+        document.querySelectorAll('.btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.preventDefault();
+                // Create ripple effect
+                const ripple = document.createElement('span');
+                ripple.style.cssText = `
+                    position: absolute;
+                    border-radius: 50%;
+                    background: rgba(255,255,255,0.3);
+                    transform: scale(0);
+                    animation: ripple 0.6s linear;
+                    pointer-events: none;
+                `;
+                
+                const rect = btn.getBoundingClientRect();
+                const size = Math.max(rect.width, rect.height);
+                ripple.style.width = ripple.style.height = size + 'px';
+                ripple.style.left = (e.clientX - rect.left - size / 2) + 'px';
+                ripple.style.top = (e.clientY - rect.top - size / 2) + 'px';
+                
+                btn.style.position = 'relative';
+                btn.style.overflow = 'hidden';
+                btn.appendChild(ripple);
+                
+                setTimeout(() => ripple.remove(), 600);
+            });
+        });
+
+        // Add CSS for ripple animation
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes ripple {
+                to {
+                    transform: scale(4);
+                    opacity: 0;
+                }
+            }
+        `;
+        document.head.appendChild(style);
+    </script>
+</body>
+</html>

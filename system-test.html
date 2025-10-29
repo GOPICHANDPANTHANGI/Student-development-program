@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SkillQuest System Test</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; background: #f5f5f5; }
+        .test-container { max-width: 800px; margin: 0 auto; background: white; padding: 20px; border-radius: 10px; }
+        .test-section { margin: 20px 0; padding: 15px; border: 1px solid #ddd; border-radius: 5px; }
+        .success { background: #d4edda; border-color: #c3e6cb; color: #155724; }
+        .error { background: #f8d7da; border-color: #f5c6cb; color: #721c24; }
+        .info { background: #d1ecf1; border-color: #bee5eb; color: #0c5460; }
+        button { padding: 10px 20px; margin: 5px; background: #007bff; color: white; border: none; border-radius: 5px; cursor: pointer; }
+        button:hover { background: #0056b3; }
+        .log { background: #f8f9fa; padding: 10px; border-radius: 5px; font-family: monospace; font-size: 12px; max-height: 200px; overflow-y: auto; }
+    </style>
+</head>
+<body>
+    <div class="test-container">
+        <h1>🔧 SkillQuest System Test</h1>
+        
+        <div class="test-section info">
+            <h3>📊 System Status</h3>
+            <p><strong>Supabase:</strong> <span id="supabase-status">Checking...</span></p>
+            <p><strong>Database:</strong> <span id="db-status">Checking...</span></p>
+            <p><strong>Tables:</strong> <span id="tables-status">Checking...</span></p>
+        </div>
+
+        <div class="test-section">
+            <h3>🧪 Test Functions</h3>
+            <button onclick="testConnection()">Test Database Connection</button>
+            <button onclick="testRegistration()">Test Student Registration</button>
+            <button onclick="testLogin()">Test Student Login</button>
+            <button onclick="testPrograms()">Test Program Management</button>
+            <button onclick="testEnrollment()">Test Enrollment</button>
+            <button onclick="runAllTests()">🚀 Run All Tests</button>
+        </div>
+
+        <div class="test-section">
+            <h3>📝 Test Log</h3>
+            <div id="test-log" class="log"></div>
+        </div>
+
+        <div class="test-section">
+            <h3>🗄️ Database Actions</h3>
+            <button onclick="clearAllData()">Clear All Data</button>
+            <button onclick="seedTestData()">Add Test Data</button>
+        </div>
+    </div>
+
+    <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+    <script src="./js/store.js"></script>
+    <script>
+        function log(message, type = 'info') {
+            const logDiv = document.getElementById('test-log');
+            const timestamp = new Date().toLocaleTimeString();
+            const color = type === 'error' ? 'red' : type === 'success' ? 'green' : 'blue';
+            logDiv.innerHTML += `<div style="color: ${color}">[${timestamp}] ${message}</div>`;
+            logDiv.scrollTop = logDiv.scrollHeight;
+            console.log(message);
+        }
+
+        async function testConnection() {
+            log('🔍 Testing database connection...');
+            try {
+                const connected = await Store.testConnection();
+                if (connected) {
+                    log('✅ Database connection successful', 'success');
+                    document.getElementById('db-status').textContent = '✅ Connected';
+                } else {
+                    log('❌ Database connection failed', 'error');
+                    document.getElementById('db-status').textContent = '❌ Failed';
+                }
+            } catch (error) {
+                log(`❌ Connection error: ${error.message}`, 'error');
+                document.getElementById('db-status').textContent = '❌ Error';
+            }
+        }
+
+        async function testRegistration() {
+            log('🧪 Testing student registration...');
+            const testStudent = {
+                name: 'Test Student',
+                roll: 'TEST001',
+                password: 'test123'
+            };
+
+            try {
+                if (Store.useSupabase()) {
+                    await Store.registerStudentSupabase(testStudent);
+                } else {
+                    Store.registerStudent(testStudent);
+                }
+                log('✅ Student registration successful', 'success');
+            } catch (error) {
+                log(`❌ Registration failed: ${error.message}`, 'error');
+            }
+        }
+
+        async function testLogin() {
+            log('🧪 Testing student login...');
+            try {
+                if (Store.useSupabase()) {
+                    await Store.loginStudentSupabase({ roll: 'TEST001', password: 'test123' });
+                } else {
+                    Store.loginStudent({ roll: 'TEST001', password: 'test123' });
+                }
+                log('✅ Student login successful', 'success');
+            } catch (error) {
+                log(`❌ Login failed: ${error.message}`, 'error');
+            }
+        }
+
+        async function testPrograms() {
+            log('🧪 Testing program management...');
+            const testProgram = {
+                title: 'Test Program',
+                category: 'Technology',
+                description: 'Test program description',
+                status: 'upcoming',
+                capacity: 30
+            };
+
+            try {
+                if (Store.useSupabase()) {
+                    await Store.saveProgramSupabase(testProgram);
+                    const programs = await Store.listProgramsSupabase();
+                    log(`✅ Program management working. Found ${programs.length} programs`, 'success');
+                } else {
+                    Store.saveProgram(testProgram);
+                    const programs = Store.listPrograms();
+                    log(`✅ Program management working. Found ${programs.length} programs`, 'success');
+                }
+            } catch (error) {
+                log(`❌ Program management failed: ${error.message}`, 'error');
+            }
+        }
+
+        async function testEnrollment() {
+            log('🧪 Testing enrollment system...');
+            try {
+                // Get first program
+                let programs;
+                if (Store.useSupabase()) {
+                    programs = await Store.listProgramsSupabase();
+                } else {
+                    programs = Store.listPrograms();
+                }
+
+                if (programs.length > 0) {
+                    const programId = programs[0].id;
+                    let success;
+                    
+                    if (Store.useSupabase()) {
+                        success = await Store.enrollSupabase('TEST001', programId);
+                    } else {
+                        success = Store.enroll('TEST001', programId);
+                    }
+
+                    if (success) {
+                        log('✅ Enrollment system working', 'success');
+                    } else {
+                        log('⚠️ Enrollment failed (may be already enrolled)', 'error');
+                    }
+                } else {
+                    log('⚠️ No programs available for enrollment test', 'error');
+                }
+            } catch (error) {
+                log(`❌ Enrollment test failed: ${error.message}`, 'error');
+            }
+        }
+
+        async function clearAllData() {
+            if (confirm('This will delete ALL data. Continue?')) {
+                log('🗑️ Clearing all data...');
+                try {
+                    if (Store.useSupabase()) {
+                        await Store.clearAllDataSupabase();
+                    }
+                    localStorage.clear();
+                    log('✅ All data cleared', 'success');
+                } catch (error) {
+                    log(`❌ Clear data failed: ${error.message}`, 'error');
+                }
+            }
+        }
+
+        async function seedTestData() {
+            log('🌱 Adding test data...');
+            try {
+                // Add test programs
+                const testPrograms = [
+                    { title: 'Web Development', category: 'Technology', description: 'Learn modern web development', status: 'upcoming', capacity: 25 },
+                    { title: 'Data Science', category: 'Analytics', description: 'Introduction to data science', status: 'ongoing', capacity: 20 },
+                    { title: 'Mobile App Development', category: 'Technology', description: 'Build mobile applications', status: 'upcoming', capacity: 30 }
+                ];
+
+                for (const program of testPrograms) {
+                    if (Store.useSupabase()) {
+                        await Store.saveProgramSupabase(program);
+                    } else {
+                        Store.saveProgram(program);
+                    }
+                }
+
+                // Add test votes
+                const testVotes = [
+                    { title: 'Machine Learning Workshop', category: 'AI' },
+                    { title: 'Cybersecurity Basics', category: 'Security' },
+                    { title: 'Cloud Computing', category: 'Infrastructure' }
+                ];
+
+                for (const vote of testVotes) {
+                    await Store.addVoteTopic(vote);
+                }
+
+                log('✅ Test data added successfully', 'success');
+            } catch (error) {
+                log(`❌ Seed data failed: ${error.message}`, 'error');
+            }
+        }
+
+        async function runAllTests() {
+            log('🚀 Running comprehensive system test...');
+            await testConnection();
+            await new Promise(resolve => setTimeout(resolve, 1000));
+            await testRegistration();
+            await new Promise(resolve => setTimeout(resolve, 1000));
+            await testLogin();
+            await new Promise(resolve => setTimeout(resolve, 1000));
+            await testPrograms();
+            await new Promise(resolve => setTimeout(resolve, 1000));
+            await testEnrollment();
+            log('🏁 All tests completed!', 'success');
+        }
+
+        // Initialize
+        window.onload = async function() {
+            document.getElementById('supabase-status').textContent = Store.useSupabase() ? '✅ Available' : '❌ Not Available';
+            await testConnection();
+        };
+    </script>
+</body>
+</html>

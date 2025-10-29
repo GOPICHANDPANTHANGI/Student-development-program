@@ -1,0 +1,681 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Portal - SkillQuest</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: url('https://images.unsplash.com/photo-1523240795612-9a054b0db644?ixlib=rb-4.0.3&auto=format&fit=crop&w=2128&q=80') center/cover no-repeat;
+            position: relative;
+            color: white;
+            line-height: 1.6;
+            min-height: 100vh;
+            font-size: 18px;
+            animation: spiralIn 1.5s ease-out;
+        }
+
+        @keyframes spiralIn {
+            0% {
+                transform: rotate(720deg) scale(0.1);
+                opacity: 0;
+            }
+            70% {
+                transform: rotate(0deg) scale(1.05);
+                opacity: 1;
+            }
+            100% {
+                transform: rotate(0deg) scale(1);
+                opacity: 1;
+            }
+        }
+
+        body {
+            color: #000000 !important;
+        }
+
+        * {
+            color: #1a1a1a !important;
+            font-size: 18px !important;
+        }
+
+        body::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: -1;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 0;
+            border-bottom: 2px solid #e2e8f0;
+            margin-bottom: 30px;
+        }
+
+        .welcome {
+            font-size: 1.8rem;
+            font-weight: 600;
+            color: #1e293b;
+        }
+
+        .nav-buttons {
+            display: flex;
+            gap: 15px;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            background: #3b82f6;
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .btn:hover {
+            background: #2563eb;
+            transform: translateY(-1px);
+        }
+
+        .dashboard {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 20px;
+            padding: 40px 30px;
+            text-align: center;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.4);
+            min-height: 150px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .stat-number {
+            font-size: 3.5rem;
+            font-weight: 700;
+            color: white;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+
+        .stat-label {
+            color: white;
+            font-weight: 600;
+            font-size: 1.1rem;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+        }
+
+        .content-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+
+        .section {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+            animation: cascadeDown 1s ease-out;
+        }
+
+        .section:nth-child(1) { animation-delay: 0.2s; }
+        .section:nth-child(2) { animation-delay: 0.4s; }
+        .section:nth-child(3) { animation-delay: 0.6s; }
+        .section:nth-child(4) { animation-delay: 0.8s; }
+
+        @keyframes cascadeDown {
+            0% {
+                transform: translateY(-100vh) rotateX(90deg);
+                opacity: 0;
+            }
+            60% {
+                transform: translateY(10px) rotateX(0deg);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(0) rotateX(0deg);
+                opacity: 1;
+            }
+        }
+
+        .section h2 {
+            margin-bottom: 20px;
+            font-size: 1.3rem;
+            color: white;
+            font-weight: 600;
+        }
+
+        .program-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 15px;
+            transition: all 0.3s ease;
+        }
+
+        .program-card:hover {
+            background: rgba(255, 255, 255, 0.15);
+            border-color: rgba(255, 255, 255, 0.4);
+            transform: translateY(-1px);
+        }
+
+        .program-title {
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: white;
+            font-size: 1.1em;
+        }
+
+        .program-meta {
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.8);
+            margin-bottom: 15px;
+        }
+
+        .program-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn-small {
+            padding: 8px 16px;
+            font-size: 0.9rem;
+            border-radius: 6px;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+
+        .btn-enroll {
+            background: #10b981;
+            color: white;
+        }
+
+        .btn-enroll:hover {
+            background: #059669;
+        }
+
+        .btn-unenroll {
+            background: #ef4444;
+            color: white;
+        }
+
+        .btn-unenroll:hover {
+            background: #dc2626;
+        }
+
+        .vote-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            margin-bottom: 10px;
+        }
+
+        .vote-btn {
+            background: rgba(255, 255, 255, 0.2) !important;
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 255, 255, 0.3) !important;
+            color: white !important;
+            padding: 8px 15px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 500;
+        }
+
+        .vote-btn:hover {
+            background: rgba(255, 255, 255, 0.3) !important;
+        }
+
+        .vote-btn:disabled {
+            background: rgba(255, 255, 255, 0.1) !important;
+            color: rgba(255, 255, 255, 0.6) !important;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr 2fr 1fr;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+
+        .form-input, .form-select {
+            padding: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 6px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(8px);
+            color: black !important;
+            font-family: inherit;
+        }
+
+        .form-input::placeholder {
+            color: rgba(0, 0, 0, 0.7) !important;
+        }
+
+        .form-input:focus, .form-select:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+
+        @media (max-width: 768px) {
+            .content-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .dashboard {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <h1 class="welcome" id="greeting">Student Portal</h1>
+            <div class="nav-buttons">
+                <button id="btn-logout" class="btn">Logout</button>
+            </div>
+        </header>
+
+
+
+        <div class="content-grid">
+            <div class="section">
+                <h2>📚 Available Programs</h2>
+                <div id="list-programs"></div>
+            </div>
+            
+            <div class="section">
+                <h2>📅 Upcoming Programs</h2>
+                <div id="list-votes"></div>
+                <form id="form-suggest" style="margin-top: 15px;">
+                    <div class="form-grid">
+                        <input id="sg-text" placeholder="Suggest a new program or topic" class="form-input" style="grid-column: 1 / 4;">
+                        <button type="submit" class="btn">Add Suggestion</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>⭐ Give Feedback</h2>
+            <form id="form-feedback">
+                <div class="form-grid">
+                    <select id="fb-program" class="form-select">
+                        <option value="">Select Program</option>
+                    </select>
+                    <select id="fb-rating" class="form-select">
+                        <option value="5">⭐⭐⭐⭐⭐</option>
+                        <option value="4">⭐⭐⭐⭐</option>
+                        <option value="3">⭐⭐⭐</option>
+                        <option value="2">⭐⭐</option>
+                        <option value="1">⭐</option>
+                    </select>
+                    <input id="fb-comment" placeholder="Your feedback" class="form-input">
+                    <button type="submit" class="btn">Submit</button>
+                </div>
+            </form>
+        </div>
+
+        <section class="dashboard" style="margin-top: 40px;">
+            <div class="stat-card">
+                <div class="stat-number" id="stat-enrolled">0</div>
+                <div class="stat-label">My Enrollments</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="stat-available">0</div>
+                <div class="stat-label">Available Programs</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="stat-feedback">0</div>
+                <div class="stat-label">My Feedback</div>
+            </div>
+        </section>
+    </div>
+
+    <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+    <script src="./js/store.js"></script>
+    <script>
+        if (!Store.requireRole('student')) { 
+            window.location.href = 'auth-student.html'; 
+        }
+
+        const elPrograms = document.getElementById('list-programs');
+        const elVotes = document.getElementById('list-votes');
+        const btnLogout = document.getElementById('btn-logout');
+
+        async function refreshStats() {
+            try {
+                const me = Store.me();
+                const rollNumber = me.roll || me.email;
+                
+                let enrolled, available, myFb;
+                
+                if (Store.useSupabase()) {
+                    const programs = await Store.listProgramsSupabase();
+                    const allPrograms = await Store.listProgramsSupabase(['upcoming','ongoing']);
+                    const feedback = await Store.listFeedbackSupabase();
+                    
+                    enrolled = programs.filter(p => p.participants && p.participants.includes(rollNumber)).length;
+                    available = allPrograms.length;
+                    myFb = feedback.filter(f => (f.student_roll||f.student_email) === rollNumber).length;
+                } else {
+                    enrolled = Store.myEnrollments(rollNumber).length;
+                    available = Store.listPrograms(['upcoming','ongoing']).length;
+                    myFb = Store.listFeedback().filter(f => (f.student_roll||f.student_email) === rollNumber).length;
+                }
+                
+                document.getElementById('stat-enrolled').textContent = enrolled;
+                document.getElementById('stat-available').textContent = available;
+                document.getElementById('stat-feedback').textContent = myFb;
+            } catch (error) {
+                console.error('Error refreshing stats:', error);
+            }
+        }
+
+        async function renderPrograms() {
+            try {
+                const me = Store.me();
+                const id = me.roll || me.email;
+                
+                let items;
+                if (Store.useSupabase()) {
+                    items = await Store.listProgramsSupabase(['upcoming','ongoing']);
+                } else {
+                    items = Store.listPrograms(['upcoming','ongoing']);
+                }
+                
+                elPrograms.innerHTML = '';
+                
+                if (!items || items.length === 0) {
+                    elPrograms.innerHTML = '<div style="text-align: center; opacity: 0.7; padding: 40px; color: black;">No programs available at the moment.</div>';
+                    return;
+                }
+                
+                items.forEach(p => {
+                    const participants = p.participants || [];
+                    const isEnrolled = participants.includes(id);
+                    const isFull = participants.length >= (p.capacity || 30);
+                    const card = document.createElement('div');
+                    card.className = 'program-card';
+                    
+                    let actionButton;
+                    if (isEnrolled) {
+                        actionButton = `<button data-id="${p.id}" class="btn-small btn-unenroll">Unenroll</button>`;
+                    } else if (isFull) {
+                        actionButton = `<button class="btn-small" style="background: #9ca3af; cursor: not-allowed;" disabled>Full</button>`;
+                    } else {
+                        actionButton = `<button data-id="${p.id}" class="btn-small btn-enroll">Enroll</button>`;
+                    }
+                    
+                    card.innerHTML = `
+                        <div class="program-title">${p.title}</div>
+                        <div class="program-meta">${p.category} • ${p.status} • ${participants.length}/${p.capacity} enrolled ${isFull ? '(FULL)' : ''}</div>
+                        <div class="program-actions">
+                            ${actionButton}
+                        </div>
+                    `;
+                    elPrograms.appendChild(card);
+                });
+            } catch (error) {
+                console.error('Error loading programs:', error);
+                elPrograms.innerHTML = '<div style="text-align: center; opacity: 0.7; padding: 40px; color: black;">Error loading programs. Please refresh the page.</div>';
+            }
+        }
+
+        async function renderVotes() {
+            try {
+                const items = Store.useSupabase() 
+                    ? await Store.listVotesSupabase()
+                    : Store.listVotes();
+                
+                elVotes.innerHTML = '';
+                const open = Store.isVotingOpen();
+                const me = Store.me();
+                const userRoll = me?.roll || me?.email;
+                
+                if (!items || items.length === 0) {
+                    elVotes.innerHTML = '<div style="text-align: center; opacity: 0.7; padding: 20px; color: black;">No program requests available.</div>';
+                    return;
+                }
+                
+                items.forEach(v => {
+                    const hasVoted = v.voters && v.voters.includes(userRoll);
+                    const row = document.createElement('div');
+                    row.className = 'vote-item';
+                    
+                    let buttonHtml;
+                    if (!open) {
+                        buttonHtml = `<span style="font-size: 0.8rem; color: #64748b;">Closed</span>`;
+                    } else if (hasVoted) {
+                        buttonHtml = `<button class="vote-btn" style="background: #6b7280; cursor: not-allowed; color: #1a1a1a !important;" disabled>Interested</button>`;
+                    } else {
+                        buttonHtml = `<button data-id="${v.id}" class="vote-btn btn-inc">Interested</button>`;
+                    }
+                    
+                    row.innerHTML = `
+                        <div>
+                            <div style="font-weight: 500; color: black;">${v.topic_title}</div>
+                            <div style="font-size: 0.8rem; color: black;">${v.votes} requests</div>
+                        </div>
+                        ${buttonHtml}
+                    `;
+                    elVotes.appendChild(row);
+                });
+            } catch (error) {
+                console.error('Error loading votes:', error);
+                elVotes.innerHTML = '<div style="text-align: center; opacity: 0.7; padding: 20px; color: black;">Error loading votes.</div>';
+            }
+        }
+
+        // Event listeners
+        elPrograms.addEventListener('click', async (e) => {
+            const t = e.target;
+            const me = Store.me();
+            const id = me.roll || me.email;
+            
+            if (t.classList.contains('btn-enroll')) {
+                const rollNumber = me.roll || id;
+                let success;
+                if (Store.useSupabase()) {
+                    success = await Store.enrollSupabase(rollNumber, t.getAttribute('data-id'));
+                } else {
+                    success = Store.enroll(rollNumber, t.getAttribute('data-id'));
+                }
+                
+                if (success === false) {
+                    alert('Enrollment failed: Program is full or you are already enrolled.');
+                } else {
+                    alert('Successfully enrolled in the program!');
+                }
+                
+                await renderPrograms();
+                await refreshStats();
+                await fillFeedbackPrograms();
+            }
+            
+            if (t.classList.contains('btn-unenroll')) {
+                const rollNumber = me.roll || id;
+                if (Store.useSupabase()) {
+                    await Store.unenrollSupabase(rollNumber, t.getAttribute('data-id'));
+                } else {
+                    Store.unenroll(rollNumber, t.getAttribute('data-id'));
+                }
+                await renderPrograms();
+                await refreshStats();
+                await fillFeedbackPrograms();
+            }
+        });
+
+        elVotes.addEventListener('click', async (e) => {
+            const t = e.target;
+            if (t.classList.contains('btn-inc')) {
+                const ok = Store.useSupabase() 
+                    ? await Store.incrementVoteSupabase(t.getAttribute('data-id'))
+                    : Store.incrementVote(t.getAttribute('data-id'));
+                if (!ok) alert('You can only request once per program.');
+                await renderVotes();
+            }
+        });
+
+        btnLogout.addEventListener('click', () => {
+            Store.logout();
+            window.location.href = 'index.html';
+        });
+
+        async function fillFeedbackPrograms() {
+            try {
+                const me = Store.me();
+                const id = me.roll || me.email;
+                const select = document.getElementById('fb-program');
+                
+                let my;
+                if (Store.useSupabase()) {
+                    const programs = await Store.listProgramsSupabase();
+                    my = programs.filter(p => p.participants && p.participants.includes(id));
+                } else {
+                    my = Store.myEnrollments(id);
+                }
+                
+                select.innerHTML = '<option value="">Select Program</option>';
+                my.forEach(p => {
+                    const o = document.createElement('option');
+                    o.value = p.id;
+                    o.textContent = p.title;
+                    select.appendChild(o);
+                });
+            } catch (error) {
+                console.error('Error loading feedback programs:', error);
+            }
+        }
+
+        document.getElementById('form-feedback').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const me = Store.me();
+            const id = me.roll || me.email;
+            const payload = {
+                program_id: document.getElementById('fb-program').value,
+                student_roll: id,
+                student_name: me.name || id,
+                rating: parseInt(document.getElementById('fb-rating').value, 10),
+                comment: document.getElementById('fb-comment').value.trim()
+            };
+            
+            if (!payload.program_id) return;
+            
+            if (Store.useSupabase()) {
+                await Store.addFeedbackSupabase(payload);
+            } else {
+                Store.addFeedback(payload);
+            }
+            
+            e.target.reset();
+            await refreshStats();
+            alert('Thanks for your feedback!');
+        });
+
+
+
+        // Add suggestion form handler
+        document.getElementById('form-suggest').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const me = Store.me();
+            const text = document.getElementById('sg-text').value.trim();
+            if (!text) return;
+            
+            // Send suggestion to admin
+            if (Store.useSupabase()) {
+                await Store.addSuggestionSupabase({ 
+                    roll: me.roll || me.email, 
+                    name: me.name || (me.roll||''), 
+                    text 
+                });
+            } else {
+                Store.addSuggestion({ 
+                    roll: me.roll || me.email, 
+                    name: me.name || (me.roll||''), 
+                    text 
+                });
+            }
+            
+            e.target.reset();
+            alert('Suggestion sent to admin!');
+        });
+
+        // Initialize with loading optimization
+        async function init() {
+            const me = Store.me();
+            if (me && (me.name || me.roll)) {
+                document.getElementById('greeting').textContent = `Welcome, ${me.name || me.roll}`;
+            }
+            
+            // Show loading state
+            elPrograms.innerHTML = '<div style="text-align: center; padding: 20px; color: black;">Loading programs...</div>';
+            elVotes.innerHTML = '<div style="text-align: center; padding: 20px; color: black;">Loading requests...</div>';
+            
+            // Load data sequentially to reduce server load
+            try {
+                await refreshStats();
+                await renderPrograms();
+                await renderVotes();
+                await fillFeedbackPrograms();
+            } catch (error) {
+                console.error('Error loading data:', error);
+            }
+        }
+
+        init();
+    </script>
+
+
+</body>
+</html>

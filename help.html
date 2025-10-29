@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Help - Student Development Programs</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            line-height: 1.6;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 20px;
+            padding: 40px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        .section {
+            margin-bottom: 30px;
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 15px;
+            color: #fbbf24;
+        }
+
+        .content {
+            font-size: 1rem;
+            margin-bottom: 15px;
+        }
+
+        .feature-list {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .feature-list li {
+            margin-bottom: 8px;
+            padding-left: 20px;
+            position: relative;
+        }
+
+        .feature-list li::before {
+            content: "•";
+            color: #fbbf24;
+            font-weight: bold;
+            position: absolute;
+            left: 0;
+        }
+
+        .back-btn {
+            display: inline-block;
+            padding: 16px 32px;
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: white;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: 600;
+            margin-top: 30px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+            font-size: 1.1rem;
+        }
+
+        .back-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(16, 185, 129, 0.4);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="title">📚 Help Guide</div>
+            <div class="subtitle">Student Development Programs</div>
+        </div>
+
+        <div class="section">
+            <div class="section-title">🎓 For Students</div>
+            <div class="content">
+                <ul class="feature-list">
+                    <li>Click 'Student Portal' to register or login with your roll number</li>
+                    <li>Browse available programs and enroll in ones you're interested in</li>
+                    <li>Give feedback and ratings after completing programs</li>
+                    <li>Vote on upcoming program topics</li>
+                    <li>Submit suggestions for new programs</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="section">
+            <div class="section-title">👩🏫 For Faculty</div>
+            <div class="content">
+                <ul class="feature-list">
+                    <li>Click 'Faculty Dashboard' and use access code: <strong>IT2025</strong></li>
+                    <li>Create, edit, and manage student development programs</li>
+                    <li>View student registrations and export participant lists</li>
+                    <li>Monitor feedback and program analytics</li>
+                    <li>Manage voting topics and review student suggestions</li>
+                    <li>Change system settings and access codes</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="section">
+            <div class="section-title">🔧 Technical Features</div>
+            <div class="content">
+                <ul class="feature-list">
+                    <li>Works with Supabase database or offline with localStorage</li>
+                    <li>Real-time data synchronization across browser tabs</li>
+                    <li>Secure authentication and role-based access control</li>
+                    <li>Responsive design works on all devices</li>
+                    <li>Data is automatically saved and backed up</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="section">
+            <div class="section-title">🌟 Why Use This System?</div>
+            <div class="content">
+                <ul class="feature-list">
+                    <li><strong>Streamlined Management:</strong> Centralized platform for all student development activities</li>
+                    <li><strong>Easy Enrollment:</strong> Students can browse and enroll in programs with just a few clicks</li>
+                    <li><strong>Real-time Feedback:</strong> Instant feedback collection helps improve program quality</li>
+                    <li><strong>Data-Driven Decisions:</strong> Analytics help faculty make informed decisions about programs</li>
+                    <li><strong>Student Voice:</strong> Voting and suggestion features ensure student needs are heard</li>
+                    <li><strong>Efficient Communication:</strong> Reduces paperwork and manual processes</li>
+                    <li><strong>Scalable Solution:</strong> Works for small classes or large institutions</li>
+                    <li><strong>Always Available:</strong> 24/7 access from any device with internet</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="section">
+            <div class="section-title">❓ Troubleshooting</div>
+            <div class="content">
+                <ul class="feature-list">
+                    <li>If login fails, check your roll number and password</li>
+                    <li>Clear browser cache if you experience issues</li>
+                    <li>Use 'Clear All Data' button to reset the system</li>
+                    <li>Contact system administrator for technical support</li>
+                </ul>
+            </div>
+        </div>
+
+        <div style="text-align: center;">
+            <a href="index.html" class="back-btn">🏠 Back to Home</a>
+        </div>
+    </div>
+</body>
+</html>

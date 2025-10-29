@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Development Programs</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: url('https://images.unsplash.com/photo-1481627834876-b7833e8f5570?ixlib=rb-4.0.3&auto=format&fit=crop&w=2128&q=80') center/cover no-repeat;
+            position: relative;
+            color: white;
+            line-height: 1.6;
+            min-height: 100vh;
+            animation: zoomIn 1s ease-out;
+        }
+
+        @keyframes zoomIn {
+            0% {
+                transform: scale(0.8);
+                opacity: 0;
+            }
+            100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        body::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: -1;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            padding: 60px 0;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: white;
+            border-radius: 20px;
+            margin-bottom: 40px;
+            animation: fallFromSky 1.5s ease-out;
+        }
+
+        @keyframes fallFromSky {
+            0% {
+                transform: translateY(-200vh) rotate(180deg);
+                opacity: 0;
+            }
+            70% {
+                transform: translateY(20px) rotate(0deg);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(0) rotate(0deg);
+                opacity: 1;
+            }
+        }
+
+        .logo {
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        .main-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 30px;
+            margin: 60px 0;
+        }
+
+        .portal-box {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+            border-radius: 50px;
+            padding: 40px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255,255,255,0.3);
+            animation: meteorFall 2s ease-out 0.5s both;
+        }
+
+        @keyframes meteorFall {
+            0% {
+                transform: translateX(-200vw) translateY(-100vh) rotate(45deg) scale(0.1);
+                opacity: 0;
+            }
+            50% {
+                opacity: 1;
+            }
+            80% {
+                transform: translateX(0) translateY(0) rotate(0deg) scale(1.1);
+            }
+            100% {
+                transform: translateX(0) translateY(0) rotate(0deg) scale(1);
+                opacity: 1;
+            }
+        }
+
+        .buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .btn {
+            padding: 16px 32px;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .btn-primary {
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            color: white;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-primary::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('https://images.unsplash.com/photo-1522202176988-66273c2fd55f?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80') center/cover;
+            opacity: 0.1;
+            z-index: -1;
+        }
+
+        .btn-secondary {
+            background: linear-gradient(135deg, #1f2937 0%, #374151 100%);
+            color: white;
+            box-shadow: 0 4px 12px rgba(31, 41, 55, 0.4);
+        }
+
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+        }
+
+        .help-button {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+            border: none;
+            border-radius: 50%;
+            color: white;
+            font-size: 20px;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+            z-index: 1000;
+        }
+
+        .help-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            z-index: 2000;
+            overflow-y: auto;
+            padding: 20px;
+        }
+
+        .help-content {
+            max-width: 800px;
+            margin: 0 auto;
+            color: white;
+        }
+
+        .help-header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .help-close {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            color: white;
+            font-size: 24px;
+            cursor: pointer;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+        }
+
+        .help-section {
+            margin-bottom: 30px;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            border-radius: 15px;
+        }
+
+        .help-section h3 {
+            color: #ffd700;
+            margin-bottom: 15px;
+            font-size: 1.3rem;
+        }
+
+        .help-section ul {
+            list-style: none;
+        }
+
+        .help-section li {
+            margin-bottom: 10px;
+            padding-left: 25px;
+            position: relative;
+        }
+
+        .help-section li::before {
+            content: '✓';
+            position: absolute;
+            left: 0;
+            color: #10b981;
+            font-weight: bold;
+        }
+
+        @media (max-width: 768px) {
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <div class="logo">Student Development Programs</div>
+            <div class="subtitle">Empowering Student Learning Journey</div>
+        </header>
+
+        <main class="main-content">
+            <div class="portal-box">
+                <div class="buttons">
+                    <a href="auth-student.html" class="btn btn-primary">
+                        👨🎓 Student Portal
+                    </a>
+                    <a href="auth-faculty.html" class="btn btn-secondary">
+                        👩🏫 Admin Dashboard
+                    </a>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <button class="help-button" onclick="openHelp()">?</button>
+
+    <div id="help-modal" class="help-modal">
+        <button class="help-close" onclick="closeHelp()">&times;</button>
+        <div class="help-content">
+            <div class="help-header">
+                <h1>🎓 SkillQuest Help Guide</h1>
+                <p>Complete guide to using the Student Development Program system</p>
+            </div>
+            
+            <div class="help-section">
+                <h3>📚 For Students</h3>
+                <ul>
+                    <li>Register with roll number + password</li>
+                    <li>Browse and enroll in programs</li>
+                    <li>Vote on program requests</li>
+                    <li>Give feedback after completion</li>
+                </ul>
+            </div>
+
+            <div class="help-section">
+                <h3>👩🏫 For Admins</h3>
+                <ul>
+                    <li>Use access code: IT2025</li>
+                    <li>Create and manage programs</li>
+                    <li>View registrations and analytics</li>
+                    <li>Download student lists</li>
+                </ul>
+            </div>
+
+            <div class="help-section">
+                <h3>🎯 Benefits</h3>
+                <ul>
+                    <li>Easy one-click enrollment</li>
+                    <li>Real-time capacity tracking</li>
+                    <li>Beautiful analytics dashboard</li>
+                    <li>Automatic data backup</li>
+                </ul>
+            </div>
+
+            <div class="help-section">
+                <h3>💡 Quick Tips</h3>
+                <ul>
+                    <li>All data is automatically saved</li>
+                    <li>Use strong passwords (6+ characters)</li>
+                    <li>Check program capacity before enrolling</li>
+                    <li>Provide honest feedback to help improve</li>
+                    <li>Contact admin for technical support</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function openHelp() {
+            document.getElementById('help-modal').style.display = 'block';
+        }
+
+        function closeHelp() {
+            document.getElementById('help-modal').style.display = 'none';
+        }
+    </script>
+</body>
+</html>

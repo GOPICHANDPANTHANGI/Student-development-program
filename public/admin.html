@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Admin Dashboard • SDP</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style> body { font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, Arial; } .bg-app { background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%); } </style>
+  </head>
+  <body class="min-h-screen bg-app text-slate-100">
+    <div class="max-w-7xl mx-auto px-6 py-8">
+      <div class="flex items-center justify-between">
+        <h1 class="text-2xl font-semibold">Faculty Admin</h1>
+        <div class="flex items-center gap-3 text-sm">
+          <a href="analytics.html" class="hover:text-orange-300">Analytics</a>
+          <button id="btn-logout" class="px-3 py-1 rounded bg-white/10 border border-white/20">Logout</button>
+        </div>
+      </div>
+
+      <div class="mt-6 grid md:grid-cols-3 gap-4">
+        <div class="bg-white/10 rounded-xl p-4">
+          <p class="text-white/70 text-sm">Total Programs</p>
+          <p id="stat-programs" class="text-2xl font-bold">0</p>
+        </div>
+        <div class="bg-white/10 rounded-xl p-4">
+          <p class="text-white/70 text-sm">Total Registrations</p>
+          <p id="stat-registrations" class="text-2xl font-bold">0</p>
+        </div>
+        <div class="bg-white/10 rounded-xl p-4">
+          <p class="text-white/70 text-sm">Feedback Entries</p>
+          <p id="stat-feedback" class="text-2xl font-bold">0</p>
+        </div>
+      </div>
+
+      <section class="mt-8 bg-white/10 rounded-2xl p-6 border border-white/10">
+        <div class="flex items-center justify-between">
+          <h2 class="text-xl font-semibold">Programs</h2>
+          <div class="flex items-center gap-2">
+            <select id="filter-status" class="px-3 py-2 rounded bg-white text-slate-900 border border-white/20 text-sm">
+              <option value="all">All</option>
+              <option value="upcoming">Upcoming</option>
+              <option value="ongoing">Ongoing</option>
+              <option value="completed">Completed</option>
+            </select>
+            <button id="btn-add" class="px-3 py-2 rounded bg-orange-400 text-slate-900 font-semibold">Add New</button>
+          </div>
+        </div>
+        <div id="list-programs" class="mt-4 grid md:grid-cols-2 gap-4"></div>
+      </section>
+
+      <section class="mt-8 grid md:grid-cols-2 gap-6">
+        <div class="bg-white/10 rounded-2xl p-6 border border-white/10">
+          <div class="flex items-center justify-between">
+            <h2 class="text-xl font-semibold">Topic Voting</h2>
+            <div class="flex items-center gap-2 text-sm">
+              <span id="voting-status" class="px-2 py-1 rounded bg-white/10">Open</span>
+              <button id="btn-toggle-voting" class="px-3 py-2 rounded bg-orange-400 text-slate-900 font-semibold">Close Voting</button>
+            </div>
+          </div>
+          <div class="mt-3 grid gap-3" id="list-votes"></div>
+          <form id="form-topic" class="mt-4 grid md:grid-cols-3 gap-3">
+            <input id="topic-title" placeholder="Topic title" class="px-3 py-2 rounded bg-white/10 border border-white/20 md:col-span-1" />
+            <input id="topic-category" placeholder="Category" class="px-3 py-2 rounded bg-white/10 border border-white/20 md:col-span-1" />
+            <button class="px-3 py-2 rounded bg-teal-300 text-slate-900 font-semibold md:col-span-1">Add Topic</button>
+          </form>
+        </div>
+        <div class="bg-white/10 rounded-2xl p-6 border border-white/10">
+          <h2 class="text-xl font-semibold">Recent Feedback</h2>
+          <div id="list-feedback" class="mt-3 grid gap-3"></div>
+        </div>
+      </section>
+
+      <section class="mt-8 bg-white/10 rounded-2xl p-6 border border-white/10">
+        <div class="flex items-center justify-between">
+          <h2 class="text-xl font-semibold">Suggestions</h2>
+          <span class="text-sm text-white/80" id="suggest-count"></span>
+        </div>
+        <div id="list-suggest" class="mt-3 grid gap-3"></div>
+      </section>
+
+      <section class="mt-8 bg-white/10 rounded-2xl p-6 border border-white/10">
+        <h2 class="text-xl font-semibold">Security Settings</h2>
+        <p class="text-white/80 text-sm">Update the faculty universal access code.</p>
+        <form id="form-code" class="mt-4 grid md:grid-cols-3 gap-3">
+          <input id="code-current" type="password" placeholder="Current code" class="px-3 py-2 rounded bg-white text-slate-900 border border-white/20 md:col-span-1" />
+          <input id="code-new" type="password" placeholder="New code" class="px-3 py-2 rounded bg-white text-slate-900 border border-white/20 md:col-span-1" />
+          <input id="code-confirm" type="password" placeholder="Confirm new code" class="px-3 py-2 rounded bg-white text-slate-900 border border-white/20 md:col-span-1" />
+          <div class="md:col-span-3 flex items-center justify-end">
+            <button class="px-4 py-2 rounded bg-orange-400 text-slate-900 font-semibold">Update Code</button>
+          </div>
+        </form>
+      </section>
+    </div>
+
+    <dialog id="dlg-program" class="rounded-xl p-0 w-full max-w-2xl bg-slate-900 text-slate-100">
+      <form id="form-program" class="p-6 grid md:grid-cols-2 gap-4">
+        <h3 class="md:col-span-2 text-xl font-semibold">Program</h3>
+        <input type="hidden" id="program-id" />
+        <div>
+          <label class="text-sm">Title</label>
+          <input id="title" class="mt-1 w-full px-3 py-2 rounded bg-white/10 border border-white/20" required />
+        </div>
+        <div>
+          <label class="text-sm">Category</label>
+          <input id="category" class="mt-1 w-full px-3 py-2 rounded bg-white/10 border border-white/20" required />
+        </div>
+        <div class="md:col-span-2">
+          <label class="text-sm">Description</label>
+          <textarea id="description" class="mt-1 w-full px-3 py-2 rounded bg-white/10 border border-white/20" rows="3"></textarea>
+        </div>
+        <div>
+          <label class="text-sm">Status</label>
+          <select id="status" class="mt-1 w-full px-3 py-2 rounded bg-white text-slate-900 border border-white/20">
+            <option>upcoming</option>
+            <option>ongoing</option>
+            <option>completed</option>
+          </select>
+        </div>
+        <div>
+          <label class="text-sm">Capacity</label>
+          <input id="capacity" type="number" min="0" class="mt-1 w-full px-3 py-2 rounded bg-white/10 border border-white/20" value="30" />
+        </div>
+        <div class="md:col-span-2 flex items-center justify-end gap-3 pt-2">
+          <button type="button" id="btn-cancel" class="px-3 py-2 rounded border border-white/20">Cancel</button>
+          <button class="px-3 py-2 rounded bg-orange-400 text-slate-900 font-semibold">Save</button>
+        </div>
+      </form>
+    </dialog>
+    <dialog id="dlg-regs" class="rounded-xl p-0 w-full max-w-md bg-slate-900 text-slate-100">
+      <div class="p-6">
+        <h3 class="text-xl font-semibold" id="regs-title">Registrations</h3>
+        <div id="regs-list" class="mt-3 grid gap-2 text-sm"></div>
+        <div class="mt-4 flex justify-between gap-2">
+          <button id="regs-export" class="px-3 py-2 rounded bg-orange-400 text-slate-900 font-semibold">Export CSV</button>
+          <button id="regs-close" class="px-3 py-2 rounded border border-white/20">Close</button>
+        </div>
+      </div>
+    </dialog>
+
+    <script src="./js/store.js"></script>
+    <script>
+      if (!Store.requireRole('faculty')) { window.location.href = 'auth-faculty.html'; }
+
+      const elPrograms = document.getElementById('list-programs');
+      const elVotes = document.getElementById('list-votes');
+      const elFeedback = document.getElementById('list-feedback');
+      const elDlg = document.getElementById('dlg-program');
+      const formProgram = document.getElementById('form-program');
+      const btnAdd = document.getElementById('btn-add');
+      const btnLogout = document.getElementById('btn-logout');
+      const filterStatus = document.getElementById('filter-status');
+
+      async function refreshStats() {
+        if (Store.useSupabase()) {
+          try {
+            const programs = await Store.listProgramsSupabase();
+            const feedback = await Store.listFeedbackSupabase();
+            const totalRegistrations = programs.reduce((sum, p) => sum + (p.participants?.length || 0), 0);
+            
+            document.getElementById('stat-programs').textContent = programs.length;
+            document.getElementById('stat-registrations').textContent = totalRegistrations;
+            document.getElementById('stat-feedback').textContent = feedback.length;
+          } catch (error) {
+            console.error('Error loading stats:', error);
+            const s = Store.stats();
+            document.getElementById('stat-programs').textContent = s.programs;
+            document.getElementById('stat-registrations').textContent = s.registrations;
+            document.getElementById('stat-feedback').textContent = s.feedback;
+          }
+        } else {
+          const s = Store.stats();
+          document.getElementById('stat-programs').textContent = s.programs;
+          document.getElementById('stat-registrations').textContent = s.registrations;
+          document.getElementById('stat-feedback').textContent = s.feedback;
+        }
+      }
+
+      async function renderPrograms() {
+        const status = filterStatus.value;
+        console.log('Rendering programs with status:', status);
+        console.log('Using Supabase:', Store.useSupabase());
+        
+        const items = Store.useSupabase() 
+          ? await Store.listProgramsSupabase(status === 'all' ? undefined : status)
+          : Store.listPrograms(status === 'all' ? undefined : status);
+        
+        console.log('Programs loaded:', items);
+        elPrograms.innerHTML = '';
+        
+        if (!items || items.length === 0) {
+          elPrograms.innerHTML = '<div class="col-span-2 text-center text-white/70 py-8">No programs found. <a href="#" onclick="document.getElementById(\'btn-add\').click()" class="text-orange-300 hover:underline">Add your first program</a></div>';
+          return;
+        }
+        
+        items.forEach(p => {
+          const card = document.createElement('div');
+          card.className = 'rounded-xl bg-white/10 border border-white/10 p-4';
+          card.innerHTML = `
+            <div class="flex items-start justify-between gap-3">
+              <div class="flex-1">
+                <h3 class="font-semibold">${p.title}</h3>
+                <p class="text-sm text-white/70">${p.category} • ${p.status}</p>
+              </div>
+              <div class="text-right text-sm text-white/80">
+                <div>Capacity: ${p.capacity}</div>
+                <div>Registered: ${p.participants.length}</div>
+              </div>
+            </div>
+            <p class="mt-2 text-sm text-white/80 line-clamp-2">${p.description || ''}</p>
+            <div class="mt-3 flex items-center gap-2">
+              <button data-id="${p.id}" class="btn-edit px-3 py-1 rounded bg-teal-300 text-slate-900 text-sm font-semibold">Edit</button>
+              <button data-id="${p.id}" class="btn-view-reg px-3 py-1 rounded bg-blue-400 text-slate-900 text-sm font-semibold">View Registrations</button>
+              <button data-id="${p.id}" class="btn-delete px-3 py-1 rounded bg-red-400 text-slate-900 text-sm font-semibold">Delete</button>
+            </div>
+          `;
+          elPrograms.appendChild(card);
+        });
+      }
+
+      async function renderVotes() {
+        const items = Store.useSupabase() 
+          ? await Store.listVotesSupabase()
+          : Store.listVotes();
+        elVotes.innerHTML = '';
+        items.forEach(v => {
+          const row = document.createElement('div');
+          row.className = 'flex items-center justify-between bg-white/10 border border-white/10 rounded px-3 py-2';
+          row.innerHTML = `
+            <div>
+              <div class="font-medium">${v.topic_title}</div>
+              <div class="text-xs text-white/70">${v.category}</div>
+            </div>
+            <div class="flex items-center gap-2">
+              <span class="text-sm">${v.votes} votes</span>
+              <button data-id="${v.id}" class="btn-editvote px-2 py-1 rounded bg-teal-300 text-slate-900 text-sm font-semibold">Edit</button>
+              <button data-id="${v.id}" class="btn-delvote px-2 py-1 rounded bg-red-400 text-slate-900 text-sm font-semibold">Delete</button>
+            </div>
+          `;
+          elVotes.appendChild(row);
+        });
+      }
+
+      async function renderFeedback() {
+        const items = Store.useSupabase() 
+          ? (await Store.listFeedbackSupabase()).slice(0, 6)
+          : Store.listFeedback().slice(0, 6);
+        elFeedback.innerHTML = '';
+        items.forEach(f => {
+          const p = f.program_id ? Store.getProgram(f.program_id) : null;
+          const card = document.createElement('div');
+          card.className = 'rounded bg-white/10 border border-white/10 p-3';
+          card.innerHTML = `
+            <div class="flex items-center justify-between text-sm">
+              <span class="font-medium">${f.student_name}</span>
+              <span>${'★'.repeat(f.rating)}${'☆'.repeat(5-f.rating)}</span>
+            </div>
+            ${p ? `<div class="text-xs text-white/70 mt-1">Program: ${p.title}</div>` : ''}
+            <div class="text-sm text-white/80 mt-1">${f.comment}</div>
+          `;
+          elFeedback.appendChild(card);
+        });
+      }
+
+      btnLogout.addEventListener('click', () => { Store.logout(); window.location.href = 'index.html'; });
+      btnAdd.addEventListener('click', () => { openDialog(); });
+      filterStatus.addEventListener('change', async () => await renderPrograms());
+
+      function openDialog(program) {
+        formProgram.reset();
+        document.getElementById('program-id').value = program?.id || '';
+        document.getElementById('title').value = program?.title || '';
+        document.getElementById('category').value = program?.category || '';
+        document.getElementById('description').value = program?.description || '';
+        document.getElementById('status').value = program?.status || 'upcoming';
+        document.getElementById('capacity').value = program?.capacity ?? 30;
+        elDlg.showModal();
+      }
+      document.getElementById('btn-cancel').addEventListener('click', () => elDlg.close());
+
+      formProgram.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const payload = {
+          id: document.getElementById('program-id').value || undefined,
+          title: document.getElementById('title').value.trim(),
+          category: document.getElementById('category').value.trim(),
+          description: document.getElementById('description').value.trim(),
+          status: document.getElementById('status').value,
+          capacity: parseInt(document.getElementById('capacity').value || '0', 10)
+        };
+        if (!payload.title) return;
+        
+        if (Store.useSupabase()) {
+          await Store.saveProgramSupabase(payload);
+        } else {
+          Store.saveProgram(payload);
+        }
+        
+        elDlg.close();
+        refreshStats();
+        await renderPrograms();
+      });
+
+      let regsProgramId = null;
+      elPrograms.addEventListener('click', async (e) => {
+        const t = e.target;
+        if (t.classList.contains('btn-edit')) {
+          const id = t.getAttribute('data-id');
+          const p = Store.getProgram(id);
+          openDialog(p);
+        }
+        if (t.classList.contains('btn-delete')) {
+          const id = t.getAttribute('data-id');
+          if (confirm('Delete this program?')) { 
+            if (Store.useSupabase()) {
+              await Store.deleteProgramSupabase(id);
+            } else {
+              Store.deleteProgram(id);
+            }
+            await renderPrograms(); 
+            refreshStats(); 
+          }
+        }
+        if (t.classList.contains('btn-view-reg')) {
+          const id = t.getAttribute('data-id');
+          const p = Store.getProgram(id);
+          const list = document.getElementById('regs-list');
+          list.innerHTML = '';
+          if (!p.participants.length) { list.textContent = 'No registrations yet.'; }
+          else {
+            p.participants.forEach(r => {
+              const row = document.createElement('div');
+              row.className = 'px-3 py-2 rounded bg-white/10 border border-white/10';
+              row.textContent = r;
+              list.appendChild(row);
+            });
+          }
+          regsProgramId = id;
+          document.getElementById('regs-title').textContent = `Registrations • ${p.title}`;
+          document.getElementById('dlg-regs').showModal();
+        }
+      });
+      document.getElementById('regs-close').addEventListener('click', ()=> document.getElementById('dlg-regs').close());
+      document.getElementById('regs-export').addEventListener('click', () => {
+        if (!regsProgramId) return;
+        const p = Store.getProgram(regsProgramId);
+        const rows = [['program_title','roll']].concat(p.participants.map(r => [p.title, r]));
+        const csv = rows.map(cols => cols.map(v => '"'+String(v).replaceAll('"','""')+'"').join(',')).join('\n');
+        const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url; a.download = `${p.title.replace(/[^a-z0-9]+/gi,'_').toLowerCase()}_registrations.csv`;
+        document.body.appendChild(a); a.click(); a.remove();
+        URL.revokeObjectURL(url);
+      });
+
+      elVotes.addEventListener('click', (e) => {
+        const t = e.target;
+        if (t.classList.contains('btn-editvote')) {
+          const id = t.getAttribute('data-id');
+          const topic = prompt('Update topic title');
+          const category = prompt('Update category');
+          if (topic) { Store.updateVoteTopic({ id, title: topic, category }); renderVotes(); }
+          return;
+        }
+        if (t.classList.contains('btn-delvote')) { Store.deleteVote(t.getAttribute('data-id')); renderVotes(); }
+      });
+
+      const btnToggleVoting = document.getElementById('btn-toggle-voting');
+      const votingStatus = document.getElementById('voting-status');
+      function refreshVotingBanner() {
+        const open = Store.isVotingOpen();
+        votingStatus.textContent = open ? 'Open' : 'Closed';
+        btnToggleVoting.textContent = open ? 'Close Voting' : 'Open Voting';
+      }
+      btnToggleVoting.addEventListener('click', () => { Store.setVotingOpen(!Store.isVotingOpen()); refreshVotingBanner(); });
+
+      document.getElementById('form-topic').addEventListener('submit', (e) => {
+        e.preventDefault();
+        const title = document.getElementById('topic-title').value.trim();
+        const category = document.getElementById('topic-category').value.trim();
+        if (!title) return;
+        Store.addVoteTopic({ title, category });
+        e.target.reset();
+        renderVotes();
+      });
+
+      function renderSuggestions() {
+        const items = Store.listSuggestions();
+        const wrap = document.getElementById('list-suggest');
+        const count = document.getElementById('suggest-count');
+        wrap.innerHTML = '';
+        count.textContent = `${items.length} total`;
+        items.forEach(s => {
+          const card = document.createElement('div');
+          card.className = 'rounded bg-white/10 border border-white/10 p-3';
+          const dt = new Date(s.date).toLocaleString();
+          card.innerHTML = `
+            <div class="flex items-center justify-between text-sm">
+              <span class="font-medium">${s.roll}</span>
+              <span class="text-white/70">${dt}</span>
+            </div>
+            <div class="text-sm text-white/80 mt-1">${s.text}</div>
+          `;
+          wrap.appendChild(card);
+        });
+      }
+
+      // Initialize the admin dashboard
+      async function init() {
+        await refreshStats();
+        await renderPrograms();
+        await renderVotes();
+        await renderFeedback();
+        refreshVotingBanner();
+        renderSuggestions();
+      }
+
+      // Start the application
+      init();
+
+      // Auto-refresh when another tab updates localStorage (same origin)
+      window.addEventListener('storage', async (e) => {
+        if (!e) return;
+        refreshStats();
+        await renderVotes();
+        await renderPrograms();
+        await renderFeedback();
+        renderSuggestions();
+        refreshVotingBanner();
+      });
+
+      document.getElementById('form-code').addEventListener('submit', (e) => {
+        e.preventDefault();
+        const cur = document.getElementById('code-current').value.trim();
+        const next = document.getElementById('code-new').value.trim();
+        const conf = document.getElementById('code-confirm').value.trim();
+        const cfg = Store.getConfig();
+        if (!cur || cur !== cfg.facultyCode) { alert('Current code is incorrect'); return; }
+        if (!next || next.length < 6) { alert('New code must be at least 6 characters'); return; }
+        if (next !== conf) { alert('New code and confirm do not match'); return; }
+        Store.setFacultyCode(next);
+        e.target.reset();
+        alert('Access code updated. You will be logged out now.');
+        Store.logout();
+        window.location.href = 'auth-faculty.html';
+      });
+    </script>
+  </body>
+</html>
+
+

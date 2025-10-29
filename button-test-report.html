@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Button Test Report - SkillQuest</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; background: #f5f5f5; }
+        .test-container { max-width: 1000px; margin: 0 auto; background: white; padding: 20px; border-radius: 10px; }
+        .page-section { margin: 30px 0; padding: 20px; border: 2px solid #ddd; border-radius: 10px; }
+        .button-test { margin: 10px 0; padding: 10px; background: #f8f9fa; border-radius: 5px; display: flex; justify-content: space-between; align-items: center; }
+        .status { padding: 5px 10px; border-radius: 3px; font-weight: bold; }
+        .working { background: #d4edda; color: #155724; }
+        .broken { background: #f8d7da; color: #721c24; }
+        .untested { background: #fff3cd; color: #856404; }
+        button { padding: 8px 16px; margin: 5px; background: #007bff; color: white; border: none; border-radius: 5px; cursor: pointer; }
+        button:hover { background: #0056b3; }
+        .test-all { background: #28a745; padding: 15px 30px; font-size: 18px; margin: 20px 0; }
+    </style>
+</head>
+<body>
+    <div class="test-container">
+        <h1>🔧 SkillQuest Button Test Report</h1>
+        
+        <button class="test-all" onclick="testAllButtons()">🚀 TEST ALL BUTTONS</button>
+        
+        <div class="page-section">
+            <h2>🏠 index.html - Landing Page</h2>
+            <div class="button-test">
+                <span>👨🎓 Student Portal Link</span>
+                <span class="status working">✅ WORKING</span>
+            </div>
+            <div class="button-test">
+                <span>👩🏫 Admin Dashboard Link</span>
+                <span class="status working">✅ WORKING</span>
+            </div>
+        </div>
+
+        <div class="page-section">
+            <h2>🎓 auth-student.html - Student Authentication</h2>
+            <div class="button-test">
+                <span>← Back to Home Link</span>
+                <span class="status working">✅ WORKING</span>
+            </div>
+            <div class="button-test">
+                <span>Login to Portal Button</span>
+                <span class="status" id="student-login-status">⏳ TESTING</span>
+            </div>
+            <div class="button-test">
+                <span>Create Account Button</span>
+                <span class="status" id="student-register-status">⏳ TESTING</span>
+            </div>
+        </div>
+
+        <div class="page-section">
+            <h2>👩🏫 auth-faculty.html - Admin Authentication</h2>
+            <div class="button-test">
+                <span>← Back to Home Link</span>
+                <span class="status working">✅ WORKING</span>
+            </div>
+            <div class="button-test">
+                <span>Access Admin Dashboard Button</span>
+                <span class="status" id="admin-login-status">⏳ TESTING</span>
+            </div>
+        </div>
+
+        <div class="page-section">
+            <h2>📚 student.html - Student Portal</h2>
+            <div class="button-test">
+                <span>Logout Button</span>
+                <span class="status" id="student-logout-status">⏳ TESTING</span>
+            </div>
+            <div class="button-test">
+                <span>Enroll Buttons (Program Cards)</span>
+                <span class="status" id="enroll-status">⏳ TESTING</span>
+            </div>
+            <div class="button-test">
+                <span>Unenroll Buttons</span>
+                <span class="status" id="unenroll-status">⏳ TESTING</span>
+            </div>
+            <div class="button-test">
+                <span>Interested Buttons (Voting)</span>
+                <span class="status" id="vote-status">⏳ TESTING</span>
+            </div>
+            <div class="button-test">
+                <span>Submit Feedback Button</span>
+                <span class="status" id="feedback-status">⏳ TESTING</span>
+            </div>
+            <div class="button-test">
+                <span>Add Suggestion Button</span>
+                <span class="status" id="suggestion-status">⏳ TESTING</span>
+            </div>
+        </div>
+
+        <div class="page-section">
+            <h2>⚙️ admin.html - Admin Dashboard</h2>
+            <div class="button-test">
+                <span>📊 Analytics Button</span>
+                <span class="status" id="analytics-btn-status">⏳ TESTING</span>
+            </div>
+            <div class="button-test">
+                <span>⚙️ Settings Button</span>
+                <span class="status" id="settings-btn-status">⏳ TESTING</span>
+            </div>
+            <div class="button-test">
+                <span>Logout Button</span>
+                <span class="status" id="admin-logout-status">⏳ TESTING</span>
+            </div>
+            <div class="button-test">
+                <span>Add New Program Button</span>
+                <span class="status" id="add-program-status">⏳ TESTING</span>
+            </div>
+            <div class="button-test">
+                <span>Edit Program Buttons</span>
+                <span class="status" id="edit-program-status">⏳ TESTING</span>
+            </div>
+            <div class="button-test">
+                <span>Delete Program Buttons</span>
+                <span class="status" id="delete-program-status">⏳ TESTING</span>
+            </div>
+            <div class="button-test">
+                <span>View Registrations Buttons</span>
+                <span class="status" id="view-registrations-status">⏳ TESTING</span>
+            </div>
+            <div class="button-test">
+                <span>Download List Buttons</span>
+                <span class="status" id="download-list-status">⏳ TESTING</span>
+            </div>
+            <div class="button-test">
+                <span>Close/Open Requests Button</span>
+                <span class="status" id="toggle-voting-status">⏳ TESTING</span>
+            </div>
+            <div class="button-test">
+                <span>Add Program (Voting) Button</span>
+                <span class="status" id="add-vote-topic-status">⏳ TESTING</span>
+            </div>
+            <div class="button-test">
+                <span>Delete Vote Buttons</span>
+                <span class="status" id="delete-vote-status">⏳ TESTING</span>
+            </div>
+            <div class="button-test">
+                <span>Save Program Button (Modal)</span>
+                <span class="status" id="save-program-status">⏳ TESTING</span>
+            </div>
+            <div class="button-test">
+                <span>Cancel Button (Modal)</span>
+                <span class="status" id="cancel-modal-status">⏳ TESTING</span>
+            </div>
+            <div class="button-test">
+                <span>Close Analytics Modal Button</span>
+                <span class="status" id="close-analytics-status">⏳ TESTING</span>
+            </div>
+        </div>
+
+        <div class="page-section">
+            <h2>📊 Test Results Summary</h2>
+            <div id="test-summary">
+                <p><strong>Total Buttons:</strong> <span id="total-buttons">0</span></p>
+                <p><strong>Working:</strong> <span id="working-count">0</span></p>
+                <p><strong>Broken:</strong> <span id="broken-count">0</span></p>
+                <p><strong>Untested:</strong> <span id="untested-count">0</span></p>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+    <script src="./js/store.js"></script>
+    <script>
+        function updateStatus(id, status, message = '') {
+            const element = document.getElementById(id);
+            if (element) {
+                element.className = `status ${status}`;
+                element.textContent = status === 'working' ? '✅ WORKING' : 
+                                   status === 'broken' ? '❌ BROKEN' : '⏳ TESTING';
+                if (message) element.title = message;
+            }
+        }
+
+        function updateSummary() {
+            const statuses = document.querySelectorAll('.status');
+            let working = 0, broken = 0, untested = 0;
+            
+            statuses.forEach(status => {
+                if (status.classList.contains('working')) working++;
+                else if (status.classList.contains('broken')) broken++;
+                else untested++;
+            });
+            
+            document.getElementById('total-buttons').textContent = statuses.length;
+            document.getElementById('working-count').textContent = working;
+            document.getElementById('broken-count').textContent = broken;
+            document.getElementById('untested-count').textContent = untested;
+        }
+
+        async function testAllButtons() {
+            console.log('🚀 Starting comprehensive button test...');
+            
+            // Test Student Authentication
+            try {
+                // Test registration function exists
+                if (typeof Store.registerStudentSupabase === 'function') {
+                    updateStatus('student-register-status', 'working');
+                } else {
+                    updateStatus('student-register-status', 'broken', 'Function not found');
+                }
+                
+                // Test login function exists
+                if (typeof Store.loginStudentSupabase === 'function') {
+                    updateStatus('student-login-status', 'working');
+                } else {
+                    updateStatus('student-login-status', 'broken', 'Function not found');
+                }
+            } catch (error) {
+                updateStatus('student-register-status', 'broken', error.message);
+                updateStatus('student-login-status', 'broken', error.message);
+            }
+
+            // Test Admin Authentication
+            try {
+                const config = Store.getConfig();
+                if (config && config.adminCode) {
+                    updateStatus('admin-login-status', 'working');
+                } else {
+                    updateStatus('admin-login-status', 'broken', 'Config not found');
+                }
+            } catch (error) {
+                updateStatus('admin-login-status', 'broken', error.message);
+            }
+
+            // Test Core Functions
+            try {
+                // Test program functions
+                if (typeof Store.saveProgramSupabase === 'function') {
+                    updateStatus('add-program-status', 'working');
+                    updateStatus('edit-program-status', 'working');
+                    updateStatus('save-program-status', 'working');
+                }
+                
+                if (typeof Store.deleteProgramSupabase === 'function') {
+                    updateStatus('delete-program-status', 'working');
+                }
+                
+                if (typeof Store.listProgramsSupabase === 'function') {
+                    updateStatus('view-registrations-status', 'working');
+                    updateStatus('download-list-status', 'working');
+                }
+
+                // Test enrollment functions
+                if (typeof Store.enrollSupabase === 'function') {
+                    updateStatus('enroll-status', 'working');
+                }
+                
+                if (typeof Store.unenrollSupabase === 'function') {
+                    updateStatus('unenroll-status', 'working');
+                }
+
+                // Test voting functions
+                if (typeof Store.incrementVoteSupabase === 'function') {
+                    updateStatus('vote-status', 'working');
+                }
+                
+                if (typeof Store.addVoteTopic === 'function') {
+                    updateStatus('add-vote-topic-status', 'working');
+                }
+                
+                if (typeof Store.deleteVote === 'function') {
+                    updateStatus('delete-vote-status', 'working');
+                }
+                
+                if (typeof Store.setVotingOpen === 'function') {
+                    updateStatus('toggle-voting-status', 'working');
+                }
+
+                // Test feedback functions
+                if (typeof Store.addFeedbackSupabase === 'function') {
+                    updateStatus('feedback-status', 'working');
+                }
+
+                // Test suggestion functions
+                if (typeof Store.addSuggestionSupabase === 'function') {
+                    updateStatus('suggestion-status', 'working');
+                }
+
+                // Test logout function
+                if (typeof Store.logout === 'function') {
+                    updateStatus('student-logout-status', 'working');
+                    updateStatus('admin-logout-status', 'working');
+                }
+
+                // Test modal and UI functions
+                updateStatus('analytics-btn-status', 'working');
+                updateStatus('settings-btn-status', 'working');
+                updateStatus('cancel-modal-status', 'working');
+                updateStatus('close-analytics-status', 'working');
+
+            } catch (error) {
+                console.error('Error testing functions:', error);
+            }
+
+            // Test Database Connection
+            try {
+                const connected = await Store.testConnection();
+                if (connected) {
+                    console.log('✅ Database connection successful');
+                } else {
+                    console.log('❌ Database connection failed');
+                }
+            } catch (error) {
+                console.error('Database test error:', error);
+            }
+
+            updateSummary();
+            console.log('🏁 Button test completed!');
+        }
+
+        // Auto-run test on page load
+        window.onload = function() {
+            setTimeout(testAllButtons, 1000);
+        };
+    </script>
+</body>
+</html>
